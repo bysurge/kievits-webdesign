@@ -461,9 +461,6 @@ html.lenis, html.lenis body { height: auto; }
 .dish s::after { content: ''; position: absolute; left: -2px; right: -2px; top: 52%; height: 2px; background: var(--wine); transform: scaleX(1); transform-origin: left; }
 .js .menu-card:not(.counted) .dish s::after { transform: scaleX(0); }
 .counted .dish s::after { transition: transform .5s 1.5s var(--ease); }
-.wordmark { overflow: hidden; border-top: 1px solid var(--line); padding-top: 4vw; line-height: .8; user-select: none; }
-.wordmark span { display: block; font-family: var(--serif); font-size: 27vw; letter-spacing: -.04em; text-align: center; transform: translateY(0);
-  background: linear-gradient(180deg, rgba(243,236,227,.16), rgba(243,236,227,.02) 85%); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .hero-b .caption { pointer-events: none; }
 
 /* ---------- Examples: swipe through phones (native scroll-snap, coverflow tilt by JS) ---------- */
@@ -615,3 +612,15 @@ html.lenis, html.lenis body { height: auto; }
 .logo svg { width: 32px; height: 32px; border-radius: 9px; }
 @media (max-width: 560px) { .logo svg { width: 28px; height: 28px; } }
 
+
+/* ---------- Footer: tidy, with icons ---------- */
+footer { padding: 56px 0 28px; }
+footer .wrap.foot { display: flex; justify-content: space-between; align-items: flex-start; gap: 28px; flex-wrap: wrap; padding-bottom: 32px; border-bottom: 1px solid var(--line); }
+.foot-brand .logo { color: var(--chalk); font-size: 20px; }
+.foot-brand p { margin-top: 10px; color: var(--faint); font-size: 14.5px; }
+.foot-contact { list-style: none; display: grid; gap: 12px; }
+.foot-contact a { display: inline-flex; align-items: center; gap: 12px; color: var(--chalk); font-size: 15px; text-decoration: none; transition: color .2s; }
+.foot-contact a:hover { color: var(--mustard); }
+.fi { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; flex: none; border: 1px solid var(--line-2); color: var(--chalk); background: rgba(241,232,220,.04); }
+.fi-wa { background: #1f8f4e; border-color: #1f8f4e; color: #fff; }
+footer .wrap.foot-base { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 20px; color: var(--faint); font-size: 13.5px; }

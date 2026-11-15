@@ -26,7 +26,9 @@
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
   const contact = document.getElementById('preview');
   if (wa && contact && 'IntersectionObserver' in window) {
-    new IntersectionObserver(([e]) => wa.classList.toggle('hide', e.isIntersecting), { threshold: .15 }).observe(contact);
+    const seen = new Set();
+    const io = new IntersectionObserver(es => { es.forEach(e => (e.isIntersecting ? seen.add(e.target) : seen.delete(e.target))); wa.classList.toggle('hide', seen.size > 0); }, { threshold: .15 });
+    io.observe(contact); const ft = document.querySelector('footer'); if (ft) io.observe(ft);
   }
 
   // ---------- hero: the phone cycles through example sites with a gold sweep ----------
@@ -265,9 +267,5 @@
       onEnter: batch => gsap.to(batch, { opacity: 1, y: 0, duration: 1, ease: 'expo.out', stagger: .08, overwrite: true }),
     });
 
-    // the big name at the bottom rises out of the floor
-    const mark = document.querySelector('.wordmark span');
-    if (mark) gsap.fromTo(mark, { yPercent: 70 }, { yPercent: 0, ease: 'none',
-      scrollTrigger: { trigger: '.wordmark', start: 'top 100%', end: 'bottom 100%', scrub: .6 } });
   }
 })();
