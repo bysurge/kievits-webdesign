@@ -137,19 +137,26 @@
     });
   }
 
-  // ---------- menu card: a cover that opens once it is in view ----------
+  // ---------- menu card: a closed menu that opens once it is well in view ----------
   const card = document.querySelector('.menu-card');
   let coverDelay = 0;
-  if (card && !reduced && 'IntersectionObserver' in window && card.getBoundingClientRect().top > innerHeight * .6) {
+  if (card && !reduced && 'IntersectionObserver' in window) {
     const title = (card.querySelector('h2') || {}).textContent || 'De kaart';
     const cover = document.createElement('div');
     cover.className = 'card-cover'; cover.setAttribute('aria-hidden', 'true');
-    cover.innerHTML = `<div class="cc-in"><svg width="54" height="54" viewBox="0 0 30 30"><circle cx="15" cy="15" r="14" fill="#e3b448"/><path d="M7 17c3-4 5-4 8 0s5 4 8 0" fill="none" stroke="#1e2b24" stroke-width="2.4" stroke-linecap="round"/></svg><b>${title}</b><small>Kievits Webdesign</small></div>`;
+    cover.innerHTML = `<div class="cc-front"><div class="cc-in"><svg width="58" height="58" viewBox="0 0 30 30"><circle cx="15" cy="15" r="14" fill="#e3b448"/><path d="M7 17c3-4 5-4 8 0s5 4 8 0" fill="none" stroke="#1e2b24" stroke-width="2.4" stroke-linecap="round"/></svg><b>${title}</b><small>Kievits Webdesign</small><em>Vandaag op de kaart</em></div></div><div class="cc-back"></div>`;
     card.append(cover);
-    coverDelay = 1.1;
-    const open = () => { card.classList.add('open'); setTimeout(() => cover.remove(), 2200); };
+    coverDelay = 1.7;
+    let opened = false;
+    const open = () => {
+      if (opened) return; opened = true;
+      card.classList.add('lift');
+      setTimeout(() => card.classList.add('open'), 350);
+      setTimeout(() => cover.remove(), 3000);
+    };
     cover.addEventListener('click', open);
-    new IntersectionObserver(([e], o) => { if (e.isIntersecting) { o.disconnect(); setTimeout(open, 350); } }, { threshold: .4 }).observe(card);
+    // opens when the top of the card has come up into the upper part of the screen
+    new IntersectionObserver(([e], o) => { if (e.isIntersecting) { o.disconnect(); setTimeout(open, 450); } }, { rootMargin: '0px 0px -38% 0px' }).observe(card);
   }
 
   // ---------- menu card: prices roll in like an old counter ----------
@@ -173,7 +180,7 @@
     new IntersectionObserver(([e], o) => {
       if (!e.isIntersecting) return; o.disconnect();
       card.classList.add('counted');
-      strips.forEach((s, i) => { s.style.transitionDelay = (coverDelay + .2 + i * .06) + 's'; s.style.transform = `translateY(${-s.dataset.to * 1.15}em)`; });
+      strips.forEach((s, i) => { s.style.transitionDelay = (coverDelay + .1 + i * .06) + 's'; s.style.transform = `translateY(${-s.dataset.to * 1.15}em)`; });
     }, { threshold: .45 }).observe(card);
   }
 
