@@ -370,8 +370,7 @@ footer a:hover { color: var(--chalk); }
 .chat-top { display: flex; align-items: center; gap: 9px; padding: 46px 16px 12px; background: #1e2b24; color: #f1efe6; }
 .chat-top b { display: block; font-size: 12.5px; }
 .chat-top small { color: #a3ab9f; font-size: 10px; }
-.av { width: 30px; height: 30px; border-radius: 50%; background: var(--mustard); flex: none; position: relative; }
-.av::after { content: ""; position: absolute; left: 7px; right: 7px; top: 11px; height: 7px; border: 2px solid var(--ink); border-radius: 50%; border-top-color: transparent; border-left-color: transparent; transform: rotate(45deg) scale(.7); }
+.av { width: 30px; height: 30px; border-radius: 9px; flex: none; background: #2a1d16 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect x='14' y='9' width='20' height='30' rx='2.5' fill='%23f3ece3'/%3E%3Cpath d='M18 16h12M18 21h8M18 26h12M18 31h6' stroke='%237a2833' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='34' cy='35' r='6.2' fill='%23e3b448' stroke='%232a1d16' stroke-width='1.6'/%3E%3Cpath d='M31.4 35l1.8 1.8 3.4-3.6' fill='none' stroke='%231e2b24' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat; }
 .chat-body { padding: 16px 12px; display: flex; flex-direction: column; gap: 8px; }
 .msg { max-width: 82%; padding: 8px 11px; border-radius: 12px; background: #fff; box-shadow: 0 1px 1px rgba(0,0,0,.08); font-size: 11.5px;
   opacity: 0; transform: translateY(8px) scale(.96); transform-origin: left bottom; transition: opacity .4s var(--ease), transform .5s var(--ease); }
@@ -586,8 +585,10 @@ html.lenis, html.lenis body { height: auto; }
 .cc-in small { color: #c9b49a; font-size: 14px; }
 .cc-in em { font-style: normal; font-family: var(--serif); color: var(--mustard); font-size: 17px; margin-top: 22px; }
 .card-cover.lift { transform: translateZ(26px) rotateY(-5deg); transition: transform .45s var(--ease); }
-.card-cover.open { transform: translateZ(0) rotateY(-168deg); opacity: 0; pointer-events: none;
-  transition: transform 1.8s cubic-bezier(.55, 0, .15, 1), opacity .45s 1.55s; }
+.card-cover.open { transform: translateZ(0) rotateY(-168deg); pointer-events: none;
+  transition: transform 1.8s cubic-bezier(.55, 0, .15, 1); }
+.cc-front, .cc-back { transition: opacity .45s 1.55s; }
+.card-cover.open .cc-front, .card-cover.open .cc-back { opacity: 0; }
 .card-cover.open .cc-shade { opacity: 1; }
 .menu-card.closed .vat, .menu-card.closed .btn { visibility: visible; }
 
@@ -610,9 +611,7 @@ html.lenis, html.lenis body { height: auto; }
   .menu-card .dish { font-size: 22px; }
 }
 
-/* ---------- Logo: wordmark "kievits." ---------- */
-.logo { font-size: 26px; gap: 0; letter-spacing: -.01em; }
-.logo .dot { color: var(--mustard); }
-.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.wordmark i { font-style: normal; color: rgba(227,180,72,.55); -webkit-text-fill-color: rgba(227,180,72,.55); }
-@media (max-width: 560px) { .logo { font-size: 24px; } }
+/* ---------- Logo: menu card with a tick ---------- */
+.logo svg { width: 32px; height: 32px; border-radius: 9px; }
+@media (max-width: 560px) { .logo svg { width: 28px; height: 28px; } }
+

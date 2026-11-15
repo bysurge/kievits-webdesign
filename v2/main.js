@@ -146,7 +146,7 @@
     holder.style.position = 'relative';
     const cover = document.createElement('div');
     cover.className = 'card-cover'; cover.setAttribute('aria-hidden', 'true');
-    cover.innerHTML = `<div class="cc-front"><div class="cc-in"><svg width="54" height="54" viewBox="0 0 30 30"><circle cx="15" cy="15" r="14" fill="#e3b448"/><path d="M7 17c3-4 5-4 8 0s5 4 8 0" fill="none" stroke="#2a1d16" stroke-width="2.4" stroke-linecap="round"/></svg><b>${title}</b><small>Kievits Webdesign</small><em>Vandaag op de kaart</em></div><i class="cc-shade"></i></div><div class="cc-back"></div>`;
+    cover.innerHTML = `<div class="cc-front"><div class="cc-in"><svg width="58" height="58" viewBox="0 0 48 48"><rect x="14" y="9" width="20" height="30" rx="2.5" fill="#f3e9d8"/><path d="M18 16h12M18 21h8M18 26h12M18 31h6" stroke="#7a2833" stroke-width="2" stroke-linecap="round"/><circle cx="34" cy="35" r="6.2" fill="#e3b448" stroke="#3a271c" stroke-width="1.6"/><path d="M31.4 35l1.8 1.8 3.4-3.6" fill="none" stroke="#1e2b24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><b>${title}</b><small>Kievits Webdesign</small><em>Vandaag op de kaart</em></div><i class="cc-shade"></i></div><div class="cc-back"></div>`;
     holder.append(cover);
     const place = () => {
       const h = Math.min(card.offsetHeight, Math.round(card.offsetWidth * 1.42));   // real menu proportions
