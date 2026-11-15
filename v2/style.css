@@ -548,3 +548,52 @@ html.lenis, html.lenis body { height: auto; }
 }
 @media (prefers-reduced-motion: reduce) { .play .paper { transform: rotate(-6deg); opacity: .25; } }
 .swap-stage.reset * { transition: none !important; animation: none !important; }
+
+/* ---------- Hero v2: the phone cycles through example sites with a gold sweep (no old site) ---------- */
+.slide { position: absolute; inset: 0; overflow: hidden; transform: translateX(101%); transition: transform 1.3s cubic-bezier(.7, 0, .2, 1); }
+.slide img { transform: translateX(-101%); transition: transform 1.3s cubic-bezier(.7, 0, .2, 1); }
+.slide.on, .slide.on img { transform: none; }
+.slide::before { content: ""; position: absolute; z-index: 2; top: 0; bottom: 0; left: 0; width: 3px; background: var(--mustard);
+  box-shadow: 0 0 24px 6px rgba(227,180,72,.7); opacity: 1; transition: opacity .4s 1.1s; }
+.slide.on::before { opacity: 0; }
+.slide.instant, .slide.instant img, .slide.instant::before { transition: none !important; }
+.showing { display: inline-flex; align-items: center; gap: 9px; margin-bottom: 24px; padding: 6px 14px 6px 10px; border-radius: 999px;
+  border: 1px solid var(--line-2); background: rgba(241,232,220,.04); font-size: 14px; color: var(--dim); animation: fade .9s .1s var(--ease) both; }
+.showing i { width: 8px; height: 8px; border-radius: 50%; background: var(--mustard); box-shadow: 0 0 0 0 rgba(227,180,72,.5); animation: pingm 2.2s infinite; }
+@keyframes pingm { 0% { box-shadow: 0 0 0 0 rgba(227,180,72,.5); } 70%, 100% { box-shadow: 0 0 0 8px rgba(227,180,72,0); } }
+.showing span { color: var(--chalk); font-weight: 600; transition: opacity .35s; }
+.showing span.swap { opacity: 0; }
+@media (max-width: 560px) { .showing { margin-bottom: 16px; font-size: 13px; } }
+
+/* ---------- Menu card cover: opens once, like a real menu ---------- */
+.menu-section .wrap { perspective: 1800px; }
+.card-cover { position: absolute; inset: 0; z-index: 3; border-radius: 4px; transform-origin: left center; cursor: pointer; display: grid; place-items: center;
+  background: #1e2b24 radial-gradient(120% 80% at 30% 20%, #2a3b31, #17221c 75%); color: #f1efe6; text-align: center;
+  box-shadow: 0 50px 100px -40px rgba(0,0,0,.8), inset 0 0 0 1px rgba(241,239,230,.06);
+  transition: transform 1.5s cubic-bezier(.65, 0, .25, 1), opacity .6s 1s; }
+.card-cover::before { content: ""; position: absolute; inset: 16px; border: 1px solid rgba(241,239,230,.35); }
+.card-cover::after { content: ""; position: absolute; inset: 22px; border: 1px solid rgba(241,239,230,.14); }
+.cc-in { display: grid; justify-items: center; gap: 8px; }
+.cc-in b { font-family: var(--serif); font-weight: 400; font-size: clamp(40px, 6vw, 60px); line-height: 1; margin-top: 14px; }
+.cc-in small { color: #a3ab9f; font-size: 14px; }
+.menu-card.open .card-cover { transform: rotateY(-118deg); opacity: 0; pointer-events: none; }
+
+/* ---------- Reviews (sample until real ones exist) ---------- */
+.sample-tag { display: inline-block; margin-bottom: 14px; padding: 4px 10px; border-radius: 6px; font-size: 13px; font-weight: 600;
+  color: var(--mustard); border: 1px dashed rgba(227,180,72,.5); }
+.rev-track { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+.rev { margin: 0; padding: 30px 28px 26px; border-radius: 18px; border: 1px solid var(--line-2); display: flex; flex-direction: column; gap: 18px;
+  background: linear-gradient(160deg, rgba(241,232,220,.05), rgba(241,232,220,.015)); }
+.stars { display: flex; gap: 4px; }
+.stars i { width: 18px; height: 18px; background: var(--mustard);
+  clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+.rev blockquote { font-family: var(--serif); font-size: 21px; line-height: 1.35; color: var(--chalk); flex: 1; }
+.rev figcaption { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--faint); }
+.rev figcaption b { display: block; color: var(--chalk); font-size: 15px; }
+.av { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; flex: none; background: var(--bg-3);
+  border: 1px solid var(--line-2); font-family: var(--serif); font-size: 17px; color: var(--mustard); }
+@media (max-width: 900px) {
+  .rev-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px; padding: 0 18px 6px; scrollbar-width: none; }
+  .rev-track::-webkit-scrollbar { display: none; }
+  .rev { flex: none; width: min(320px, 84vw); scroll-snap-align: center; }
+}

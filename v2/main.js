@@ -29,49 +29,34 @@
     new IntersectionObserver(([e]) => wa.classList.toggle('hide', e.isIntersecting), { threshold: .15 }).observe(contact);
   }
 
-  // ---------- hero: old site becomes new ----------
+  // ---------- hero: the phone cycles through example sites with a gold sweep ----------
   if (hero) {
-    const btns = hero.querySelectorAll('.switch button');
-    const screen = hero.querySelector('.screen3'), wipe = hero.querySelector('.wipe'), wipeImg = wipe.querySelector('img');
-    let touched = false;
-    const clearDrag = () => { wipe.style.transform = ''; wipeImg.style.transform = ''; wipe.style.transition = ''; wipeImg.style.transition = ''; };
-    const show = v => {
-      clearDrag();
-      hero.classList.toggle('is-new', v === 'new');
-      btns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === v)));
+    const slides = [...hero.querySelectorAll('.slide')];
+    const label = document.getElementById('showing');
+    let cur = 0, z = 1, timer = 0, visible = true;
+    setTimeout(() => hero.classList.add('is-new'), reduced ? 0 : 900);   // floating labels come in
+    const ready = img => (img.complete && img.naturalWidth ? Promise.resolve() : img.decode ? img.decode().catch(() => {}) : new Promise(ok => { img.onload = ok; }));
+    const next = () => {
+      const n = (cur + 1) % slides.length, s = slides[n], img = s.querySelector('img');
+      img.loading = 'eager';
+      ready(img).then(() => {
+        // put the next slide back at the start without animating, on top of the rest, then sweep it in
+        s.classList.add('instant'); s.classList.remove('on'); void s.offsetWidth; s.classList.remove('instant');
+        s.style.zIndex = ++z;
+        requestAnimationFrame(() => requestAnimationFrame(() => s.classList.add('on')));
+        if (label) { label.classList.add('swap'); setTimeout(() => { label.textContent = s.dataset.name; label.classList.remove('swap'); }, 450); }
+        cur = n;
+        schedule();
+      });
     };
-    btns.forEach(b => b.addEventListener('click', () => { touched = true; show(b.dataset.v); }));
-    // play once when the phone is properly in view and the new image is ready
-    const ready = new Image(); ready.src = wipeImg.getAttribute('src');
-    const decoded = ready.decode ? ready.decode().catch(() => {}) : Promise.resolve();
-    const inView = new Promise(ok => {
-      if (!('IntersectionObserver' in window)) return ok();
-      new IntersectionObserver(([e], o) => { if (e.isIntersecting) { o.disconnect(); ok(); } }, { threshold: .55 }).observe(hero.querySelector('.phone3'));
-    });
-    Promise.all([decoded, inView]).then(() => setTimeout(() => { if (!touched) show('new'); }, reduced ? 0 : 1000));
-
-    // drag across the screen to compare old and new yourself
-    let drag = false;
-    const setSplit = x => {
-      const r = screen.getBoundingClientRect();
-      const pct = Math.max(0, Math.min(100, (x - r.left) / r.width * 100));
-      wipe.style.transform = `translateX(${pct}%)`; wipeImg.style.transform = `translateX(${-pct}%)`;
-      hero.classList.toggle('is-new', pct < 50);
-      btns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === (pct < 50 ? 'new' : 'old'))));
-    };
-    screen.style.touchAction = 'pan-y';
-    screen.addEventListener('pointerdown', e => {
-      touched = true; drag = true; screen.setPointerCapture(e.pointerId);
-      wipe.style.transition = 'transform .25s var(--ease)'; wipeImg.style.transition = 'transform .25s var(--ease)';
-      setSplit(e.clientX);
-    });
-    screen.addEventListener('pointermove', e => { if (drag) { wipe.style.transition = 'none'; wipeImg.style.transition = 'none'; setSplit(e.clientX); } });
-    const end = () => { drag = false; };
-    screen.addEventListener('pointerup', end); screen.addEventListener('pointercancel', end);
-
+    const schedule = () => { clearTimeout(timer); if (visible && !document.hidden) timer = setTimeout(next, 3800); };
+    if (!reduced && slides.length > 1) {
+      if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { visible = e.isIntersecting; visible ? schedule() : clearTimeout(timer); }, { threshold: .2 }).observe(hero.querySelector('.phone3'));
+      document.addEventListener('visibilitychange', () => (document.hidden ? clearTimeout(timer) : schedule()));
+      schedule();
+    }
     if (fine && !reduced) {
       addEventListener('pointermove', e => {
-        if (drag) return;
         const x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5;
         rig.style.setProperty('--ry', (-16 + x * 22).toFixed(1) + 'deg'); rig.style.setProperty('--rx', (6 - y * 10).toFixed(1) + 'deg');
       }, { passive: true });
@@ -152,8 +137,22 @@
     });
   }
 
-  // ---------- menu card: prices roll in like an old counter ----------
+  // ---------- menu card: a cover that opens once it is in view ----------
   const card = document.querySelector('.menu-card');
+  let coverDelay = 0;
+  if (card && !reduced && 'IntersectionObserver' in window && card.getBoundingClientRect().top > innerHeight * .6) {
+    const title = (card.querySelector('h2') || {}).textContent || 'De kaart';
+    const cover = document.createElement('div');
+    cover.className = 'card-cover'; cover.setAttribute('aria-hidden', 'true');
+    cover.innerHTML = `<div class="cc-in"><svg width="54" height="54" viewBox="0 0 30 30"><circle cx="15" cy="15" r="14" fill="#e3b448"/><path d="M7 17c3-4 5-4 8 0s5 4 8 0" fill="none" stroke="#1e2b24" stroke-width="2.4" stroke-linecap="round"/></svg><b>${title}</b><small>Kievits Webdesign</small></div>`;
+    card.append(cover);
+    coverDelay = 1.1;
+    const open = () => { card.classList.add('open'); setTimeout(() => cover.remove(), 2200); };
+    cover.addEventListener('click', open);
+    new IntersectionObserver(([e], o) => { if (e.isIntersecting) { o.disconnect(); setTimeout(open, 350); } }, { threshold: .4 }).observe(card);
+  }
+
+  // ---------- menu card: prices roll in like an old counter ----------
   if (card && !reduced && 'IntersectionObserver' in window) {
     const strips = [];
     card.querySelectorAll('.dish .p').forEach(p => {
@@ -174,7 +173,7 @@
     new IntersectionObserver(([e], o) => {
       if (!e.isIntersecting) return; o.disconnect();
       card.classList.add('counted');
-      strips.forEach((s, i) => { s.style.transitionDelay = (.2 + i * .06) + 's'; s.style.transform = `translateY(${-s.dataset.to * 1.15}em)`; });
+      strips.forEach((s, i) => { s.style.transitionDelay = (coverDelay + .2 + i * .06) + 's'; s.style.transform = `translateY(${-s.dataset.to * 1.15}em)`; });
     }, { threshold: .45 }).observe(card);
   }
 
@@ -245,11 +244,6 @@
       start: 'top 90%', once: true,
       onEnter: batch => gsap.to(batch, { opacity: 1, y: 0, duration: 1, ease: 'expo.out', stagger: .08, overwrite: true }),
     });
-
-    if (card && below(card)) {
-      gsap.fromTo(card, { rotateX: 14, y: 80, transformPerspective: 1200, transformOrigin: '50% 100%' },
-        { rotateX: 0, y: 0, ease: 'none', scrollTrigger: { trigger: card, start: 'top 100%', end: 'top 45%', scrub: .8 } });
-    }
 
     // the big name at the bottom rises out of the floor
     const mark = document.querySelector('.wordmark span');
