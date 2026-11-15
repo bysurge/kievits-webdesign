@@ -137,25 +137,36 @@
     });
   }
 
-  // ---------- menu card: a closed menu that opens once it is well in view ----------
+  // ---------- menu card: a closed (portrait) menu that opens and unfolds once it is well in view ----------
   const card = document.querySelector('.menu-card');
   let coverDelay = 0;
-  if (card && !reduced && 'IntersectionObserver' in window) {
+  if (card && !reduced && 'IntersectionObserver' in window && window.CSS && CSS.supports('clip-path', 'inset(0 0 10px 0)')) {
     const title = (card.querySelector('h2') || {}).textContent || 'De kaart';
+    const holder = card.parentElement;
+    holder.style.position = 'relative';
     const cover = document.createElement('div');
     cover.className = 'card-cover'; cover.setAttribute('aria-hidden', 'true');
-    cover.innerHTML = `<div class="cc-front"><div class="cc-in"><svg width="58" height="58" viewBox="0 0 30 30"><circle cx="15" cy="15" r="14" fill="#e3b448"/><path d="M7 17c3-4 5-4 8 0s5 4 8 0" fill="none" stroke="#1e2b24" stroke-width="2.4" stroke-linecap="round"/></svg><b>${title}</b><small>Kievits Webdesign</small><em>Vandaag op de kaart</em></div></div><div class="cc-back"></div>`;
-    card.append(cover);
-    coverDelay = 1.7;
+    cover.innerHTML = `<div class="cc-front"><div class="cc-in"><svg width="54" height="54" viewBox="0 0 30 30"><circle cx="15" cy="15" r="14" fill="#e3b448"/><path d="M7 17c3-4 5-4 8 0s5 4 8 0" fill="none" stroke="#2a1d16" stroke-width="2.4" stroke-linecap="round"/></svg><b>${title}</b><small>Kievits Webdesign</small><em>Vandaag op de kaart</em></div><i class="cc-shade"></i></div><div class="cc-back"></div>`;
+    holder.append(cover);
+    const place = () => {
+      const h = Math.min(card.offsetHeight, Math.round(card.offsetWidth * 1.42));   // real menu proportions
+      card.style.setProperty('--closed', h + 'px');
+      Object.assign(cover.style, { left: card.offsetLeft + 'px', top: card.offsetTop + 'px', width: card.offsetWidth + 'px', height: h + 'px' });
+    };
+    card.classList.add('closed'); place();
+    addEventListener('resize', place);
+    coverDelay = 2.2;
     let opened = false;
     const open = () => {
       if (opened) return; opened = true;
-      card.classList.add('lift');
-      setTimeout(() => card.classList.add('open'), 350);
-      setTimeout(() => cover.remove(), 3000);
+      card.classList.add('lift'); cover.classList.add('lift');
+      setTimeout(() => cover.classList.add('open'), 380);              // the cover swings open
+      setTimeout(() => { card.classList.add('unfolding'); card.classList.remove('closed'); }, 1150);
+      setTimeout(() => card.dispatchEvent(new Event('menu-unfold')), 1500);   // then the menu unfolds downwards
+      setTimeout(() => card.classList.remove('unfolding'), 2800);
+      setTimeout(() => { cover.remove(); removeEventListener('resize', place); }, 3400);
     };
     cover.addEventListener('click', open);
-    // opens when the top of the card has come up into the upper part of the screen
     new IntersectionObserver(([e], o) => { if (e.isIntersecting) { o.disconnect(); setTimeout(open, 450); } }, { rootMargin: '0px 0px -38% 0px' }).observe(card);
   }
 
@@ -177,11 +188,13 @@
       });
       node.replaceWith(wrap);
     });
-    new IntersectionObserver(([e], o) => {
-      if (!e.isIntersecting) return; o.disconnect();
+    const count = () => {
       card.classList.add('counted');
-      strips.forEach((s, i) => { s.style.transitionDelay = (coverDelay + .1 + i * .06) + 's'; s.style.transform = `translateY(${-s.dataset.to * 1.15}em)`; });
-    }, { threshold: .45 }).observe(card);
+      strips.forEach((s, i) => { s.style.transitionDelay = (.1 + i * .06) + 's'; s.style.transform = `translateY(${-s.dataset.to * 1.15}em)`; });
+    };
+    // with a cover: count while the menu unfolds; without: when the card comes into view
+    if (coverDelay) card.addEventListener('menu-unfold', count, { once: true });
+    else new IntersectionObserver(([e], o) => { if (e.isIntersecting) { o.disconnect(); count(); } }, { threshold: .45 }).observe(card);
   }
 
   // ---------- pointer-only niceties ----------
