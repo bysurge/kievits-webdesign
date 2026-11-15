@@ -540,6 +540,11 @@ html.lenis, html.lenis body { height: auto; }
   .paper { background-size: 100% 26px; background-image: linear-gradient(transparent 25px, rgba(122,40,51,.12) 26px); }
   .mini-phone { width: 50%; }
   .bubble { left: 0; font-size: 12px; }
+  .mini-phone { width: 54%; padding: 6px; border-radius: 28px; } .mini-screen { border-radius: 23px; }
+  .ms-top { font-size: 17px; padding: 0 11px 9px; } .ms-menu { padding: 10px 11px; }
+  .ms-h { font-size: 14px; height: 22px; white-space: nowrap; } .ms-h em { font-size: 9px; padding: 1px 6px; vertical-align: 2px; }
+  .ms-rows { left: 11px; right: 11px; top: 38px; } .ms-rows p { font-size: 11px; padding: 5px 0; }
+  .ms-toast { white-space: nowrap; font-size: 10px; padding: 8px 9px; left: 7px; right: 7px; bottom: 9px; }
 }
 @media (prefers-reduced-motion: reduce) { .play .paper { transform: rotate(-6deg); opacity: .25; } }
 .swap-stage.reset * { transition: none !important; animation: none !important; }
