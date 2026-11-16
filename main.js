@@ -29,6 +29,7 @@
     const seen = new Set();
     const io = new IntersectionObserver(es => { es.forEach(e => (e.isIntersecting ? seen.add(e.target) : seen.delete(e.target))); wa.classList.toggle('hide', seen.size > 0); }, { threshold: .15 });
     io.observe(contact); const ft = document.querySelector('footer'); if (ft) io.observe(ft);
+    const sheet = document.querySelector('.story-device'); if (sheet && innerWidth < 900) io.observe(sheet);
   }
 
   // ---------- hero: the phone cycles through example sites with a gold sweep ----------
@@ -81,7 +82,7 @@
         steps.forEach(s => s.classList.toggle('is-on', s === e.target));
         device.dataset.active = e.target.dataset.step;
       }
-    }, { rootMargin: innerWidth < 900 ? '-46% 0px -44% 0px' : '-45% 0px -50% 0px' });
+    }, { rootMargin: innerWidth < 900 ? '-24% 0px -74% 0px' : '-45% 0px -50% 0px' });
     steps.forEach(s => io.observe(s));
   }
 
