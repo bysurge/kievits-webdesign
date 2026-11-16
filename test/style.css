@@ -672,4 +672,4 @@ footer .wrap.foot-base { display: flex; justify-content: space-between; gap: 12p
   .story-device::after { height: 400px; background: linear-gradient(180deg, rgba(22,17,16,0), rgba(22,17,16,.9) 38%, var(--bg) 62%); }
   .story-step h3, .story-step p, .story-step span { text-shadow: 0 1px 14px rgba(22,17,16,.9); }
 }
-@media (max-width: 900px) { .story-device .toast { bottom: auto; top: 46%; } }
+@media (max-width: 900px) { .story-device .toast { bottom: auto; top: 61%; } }
