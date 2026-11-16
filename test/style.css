@@ -625,51 +625,20 @@ footer .wrap.foot { display: flex; justify-content: space-between; align-items: 
 .fi-wa { background: #1f8f4e; border-color: #1f8f4e; color: #fff; }
 footer .wrap.foot-base { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 20px; color: var(--faint); font-size: 13.5px; }
 
-/* ---------- Mobile: "Zo werkt het" phone as a bottom sheet (feedback 2026-11-16) ---------- */
+/* ---------- Mobile: "Zo werkt het" phone on top, a bit bigger than before (2026-11-16) ---------- */
 @media (max-width: 900px) {
-  .story-device { order: 2; position: sticky; top: auto; bottom: 0; z-index: 3; height: min(50svh, 440px); margin: 0 -18px;
-    padding-top: 24px; overflow: hidden; background: linear-gradient(180deg, #241c19, var(--bg-2) 40%);
-    border-radius: 26px 26px 0 0; border-top: 1px solid var(--line-2); box-shadow: 0 -24px 50px -16px rgba(0,0,0,.75); }
-  .story-device::before { content: ""; position: absolute; z-index: 2; top: 9px; left: 50%; width: 42px; height: 4px; margin-left: -21px;
-    border-radius: 2px; background: rgba(241,232,220,.22); }
-  .device { transform: scale(.8); }
-  .story-step, .story-step:first-child { min-height: 60svh; padding-top: 20px; justify-content: flex-start; }
+  .story-device { height: 404px; }
+  .device { transform: scale(.64); }
+  .story-step, .story-step:first-child { min-height: 31svh; }
   .story-step:last-child { min-height: 46svh; }
 }
-@media (max-width: 900px) {
-  .story { padding-bottom: 0; }
-  .story-device .toast { bottom: 96px; }
+@media (max-width: 900px) and (max-height: 700px) {
+  .story-device { height: 336px; }
+  .device { transform: scale(.53); }
 }
 
-/* ---------- Mobile v2: big phone, step text over a fade at the bottom (feedback broer 2, 2026-11-16) ---------- */
+/* ---------- Mobile: header button only after the big hero button has scrolled away ---------- */
 @media (max-width: 900px) {
-  .story-device { order: 0; position: sticky; top: 60px; bottom: auto; z-index: 1; height: calc(100svh - 60px); margin: 0 -18px;
-    padding-top: 18px; overflow: hidden; background: none; border: 0; border-radius: 0; box-shadow: none; }
-  .story-device::before { display: none; }
-  .device { transform: scale(1.04); }
-  .story-steps { position: relative; z-index: 2; margin-top: calc(-100svh + 60px); }
-  .story-step, .story-step:first-child, .story-step:last-child { min-height: 80svh; padding: 0 18px 26px; margin: 0 -18px;
-    justify-content: flex-end; max-width: none;
-    background: linear-gradient(180deg, rgba(22,17,16,0) calc(100% - 300px), rgba(22,17,16,.88) calc(100% - 175px), var(--bg) calc(100% - 60px)); }
-  .js .story-step, .js .story-step.is-on { opacity: 1; }
-  .js .story-step > * { opacity: .25; transition: opacity .5s var(--ease); }
-  .js .story-step.is-on > * { opacity: 1; }
-  .story-step h3 { font-size: 30px; }
-  .story-device .toast { bottom: 18px; }
-  .story { padding-bottom: 40px; }
+  .js .site-header .nav .btn { transition: opacity .35s var(--ease), transform .35s var(--ease); }
+  .js .site-header:not(.show-cta) .nav .btn { opacity: 0; transform: translateY(-6px); pointer-events: none; }
 }
-@media (max-width: 900px) and (max-height: 720px) { .device { transform: scale(.9); } }
-@media (max-width: 900px) and (prefers-reduced-motion: reduce) { .js .story-step > * { opacity: 1; } }
-@media (max-width: 900px) {
-  .story-step, .story-step:first-child, .story-step:last-child { background: none; }
-  .story-device::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 320px; pointer-events: none; z-index: 2;
-    background: linear-gradient(180deg, rgba(22,17,16,0), rgba(22,17,16,.9) 50%, var(--bg) 82%); }
-  .js .story-step > * { opacity: 0; transform: translateY(12px); transition: opacity .5s var(--ease), transform .6s var(--ease); }
-  .js .story-step.is-on > * { opacity: 1; transform: none; }
-}
-@media (max-width: 900px) and (prefers-reduced-motion: reduce) { .js .story-step > * { opacity: 1; transform: none; } }
-@media (max-width: 900px) {
-  .story-device::after { height: 400px; background: linear-gradient(180deg, rgba(22,17,16,0), rgba(22,17,16,.9) 38%, var(--bg) 62%); }
-  .story-step h3, .story-step p, .story-step span { text-shadow: 0 1px 14px rgba(22,17,16,.9); }
-}
-@media (max-width: 900px) { .story-device .toast { bottom: auto; top: 61%; } }

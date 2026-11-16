@@ -24,12 +24,16 @@
     });
   };
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  // phone: the header button only appears once the big hero button is out of view
+  const heroCta = document.querySelector('.hero-ctas');
+  if (header && heroCta && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([e]) => header.classList.toggle('show-cta', !e.isIntersecting && e.boundingClientRect.top < 0), { threshold: 0 }).observe(heroCta);
+  } else if (header) header.classList.add('show-cta');
   const contact = document.getElementById('preview');
   if (wa && contact && 'IntersectionObserver' in window) {
     const seen = new Set();
     const io = new IntersectionObserver(es => { es.forEach(e => (e.isIntersecting ? seen.add(e.target) : seen.delete(e.target))); wa.classList.toggle('hide', seen.size > 0); }, { threshold: .15 });
     io.observe(contact); const ft = document.querySelector('footer'); if (ft) io.observe(ft);
-    const sheet = document.querySelector('.story-device'); if (sheet && innerWidth < 900) io.observe(sheet);
   }
 
   // ---------- hero: the phone cycles through example sites with a gold sweep ----------
@@ -75,14 +79,21 @@
   // ---------- story: the phone follows the step you are reading ----------
   const device = document.querySelector('.device');
   const steps = [...document.querySelectorAll('.story-step')];
-  if (device && steps.length && 'IntersectionObserver' in window) {
+  const setStep = s => { steps.forEach(x => x.classList.toggle('is-on', x === s)); device.dataset.active = s.dataset.step; };
+  if (device && steps.length && innerWidth < 900) {
+    // phone: the step whose top has come up past 88% of the screen is active (text stays clear of the phone)
+    let q = false;
+    const pick = () => { q = false; let cur = steps[0]; for (const s of steps) if (s.getBoundingClientRect().top < innerHeight * .88) cur = s; if (!cur.classList.contains('is-on')) setStep(cur); };
+    addEventListener('scroll', () => { if (!q) { q = true; requestAnimationFrame(pick); } }, { passive: true });
+    pick();
+  } else if (device && steps.length && 'IntersectionObserver' in window) {
     const io = new IntersectionObserver(entries => {
       for (const e of entries) {
         if (!e.isIntersecting) continue;
         steps.forEach(s => s.classList.toggle('is-on', s === e.target));
         device.dataset.active = e.target.dataset.step;
       }
-    }, { rootMargin: innerWidth < 900 ? '-68% 0px -14% 0px' : '-45% 0px -50% 0px' });
+    }, { rootMargin: innerWidth < 900 ? '-60% 0px -30% 0px' : '-45% 0px -50% 0px' });
     steps.forEach(s => io.observe(s));
   }
 
