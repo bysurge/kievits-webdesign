@@ -625,18 +625,20 @@ footer .wrap.foot { display: flex; justify-content: space-between; align-items: 
 .fi-wa { background: #1f8f4e; border-color: #1f8f4e; color: #fff; }
 footer .wrap.foot-base { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 20px; color: var(--faint); font-size: 13.5px; }
 
-/* ---------- Mobile: "Zo werkt het" phone as a bottom sheet (feedback 2026-11-16) ---------- */
+/* ---------- Mobile: "Zo werkt het" phone on top, a bit bigger than before (2026-11-16) ---------- */
 @media (max-width: 900px) {
-  .story-device { order: 2; position: sticky; top: auto; bottom: 0; z-index: 3; height: min(50svh, 440px); margin: 0 -18px;
-    padding-top: 24px; overflow: hidden; background: linear-gradient(180deg, #241c19, var(--bg-2) 40%);
-    border-radius: 26px 26px 0 0; border-top: 1px solid var(--line-2); box-shadow: 0 -24px 50px -16px rgba(0,0,0,.75); }
-  .story-device::before { content: ""; position: absolute; z-index: 2; top: 9px; left: 50%; width: 42px; height: 4px; margin-left: -21px;
-    border-radius: 2px; background: rgba(241,232,220,.22); }
-  .device { transform: scale(.8); }
-  .story-step, .story-step:first-child { min-height: 60svh; padding-top: 20px; justify-content: flex-start; }
+  .story-device { height: 404px; }
+  .device { transform: scale(.64); }
+  .story-step, .story-step:first-child { min-height: 31svh; }
   .story-step:last-child { min-height: 46svh; }
 }
+@media (max-width: 900px) and (max-height: 700px) {
+  .story-device { height: 336px; }
+  .device { transform: scale(.53); }
+}
+
+/* ---------- Mobile: header button only after the big hero button has scrolled away ---------- */
 @media (max-width: 900px) {
-  .story { padding-bottom: 0; }
-  .story-device .toast { bottom: 96px; }
+  .js .site-header .nav .btn { transition: opacity .35s var(--ease), transform .35s var(--ease); }
+  .js .site-header:not(.show-cta) .nav .btn { opacity: 0; transform: translateY(-6px); pointer-events: none; }
 }
