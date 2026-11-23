@@ -193,7 +193,7 @@
       const txt = node.textContent.trim();
       const wrap = document.createElement('span'); wrap.className = 'price-roll'; wrap.setAttribute('aria-label', txt);
       [...txt].forEach((ch, i) => {
-        if (!/\d/.test(ch)) { const s = document.createElement('span'); s.textContent = ch; s.setAttribute('aria-hidden', 'true'); wrap.append(s); return; }
+        if (!/\d/.test(ch)) { const s = document.createElement('span'); s.textContent = ch === ' ' ? ' ' : ch; s.setAttribute('aria-hidden', 'true'); wrap.append(s); return; }
         const roll = document.createElement('span'); roll.className = 'roll'; roll.setAttribute('aria-hidden', 'true');
         const strip = document.createElement('span'); strip.className = 'strip';
         const to = 10 * (1 + i) + Number(ch);
